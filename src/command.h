@@ -1,8 +1,10 @@
 #pragma once
 
+#include <vector>
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <iostream>
 
 namespace slesk {
 	
@@ -23,11 +25,11 @@ namespace slesk {
 	public:
 		
 		Command(const std::string& _command) :
-		m_command(std::string(_command.begin() + 1, _command.end() - 2))
+		m_command(std::string(_command.begin() + 1, _command.end() - 1))
 		{
 			assert(_command.front() == '{');
 			assert(_command.back() == '}');
-			std::stringstream stream(std::string(_command.begin() + 1, _command.end() - 2));
+			std::stringstream stream(std::string(_command.begin() + 1, _command.end() - 1));
 			std::string buf;
 			unsigned int i = 0;
 			while (std::getline(stream, buf, ' ')) {
@@ -60,6 +62,19 @@ namespace slesk {
 		
 		inline const std::vector <CommandToken>& flags() const {
 			return m_flags;
+		}
+		
+		inline std::string command_args() const {
+			return m_command.substr(m_module.str.length() + (m_command[m_module.str.length()] == ' '));
+		}
+		
+		inline const std::string& str() const {
+			return m_command;
+		}
+		
+		inline std::ostream& operator << (std::ostream& stream) const {
+			stream << this->str();
+			return stream;
 		}
 		
 	private:
