@@ -1,2 +1,2 @@
 # slesk
-...setting up at the moment
+background process managing - 'beta' works
